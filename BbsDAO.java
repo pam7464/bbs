@@ -78,16 +78,44 @@ public class BbsDAO {
 	
 	
 	//bbs목록 가져오기 메소드
-	public ArrayList<Bbs> getList(){
-		String SQL = "SELECT * FROM bbs WHERE bbsAvailable = 1 ORDER BY bbsID DESC LIMIT 10";
+	public ArrayList<Bbs> getList(int pageNumber){
+		String SQL = "SELECT * FROM bbs WHERE bbsID<? AND bbsAvailable = 1 ORDER BY bbsID DESC LIMIT 10";
 		ArrayList<Bbs> list = new ArrayList<Bbs>();
 		try {
 			PreparedStatement pstmt=conn.prepareStatement(SQL);
-			
+			pstmt.setInt(1, getNext() - (pageNumber-1)*10);
+			rs=pstmt.executeQuery();
+			while(rs.next()) {
+				Bbs bbs = new Bbs();
+				bbs.setBbsID(rs.getInt(1));
+				bbs.setBbsTitle(rs.getString(2));
+				bbs.setUserID(rs.getString(3));
+				bbs.setBbsDate(rs.getString(4));
+				bbs.setBbsContent(rs.getString(5));
+				bbs.setBbsAvailable(rs.getInt(6));
+				list.add(bbs);
+			}
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
 		return list;
+	}
+	
+	
+	//페이지 처리 메서드
+	public boolean nextPage(int pageNumber) {
+		String SQL = "SELECT * FROM bbs WHERE bbsID<? AND bbsAvailable = 1";
+		try {
+			PreparedStatement pstmt=conn.prepareStatement(SQL);
+			pstmt.setInt(1, getNext() - (pageNumber-1)*10);
+			rs=pstmt.executeQuery();
+			if(rs.next()) {
+				return true;
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 	
 	

@@ -3,6 +3,7 @@
 <%@ page import="bbs.BbsDAO" %><!-- 사용자 라이브러리 -->
 <%@ page import="bbs.Bbs" %><!-- 사용자 라이브러리 -->
 <%@ page import="java.io.PrintWriter" %> <!-- 자바에서 자바스크립트 사용 -->
+<%@ page import="java.util.ArrayList" %> <!-- 자바에서 자바스크립트 사용 -->
 
 <% request.setCharacterEncoding("utf-8"); %><!-- 넘어온 한글자료 깨지지 않도록 -->    
 <!DOCTYPE html>
@@ -20,6 +21,12 @@
 		String userID = null;
 		if(session.getAttribute("userID") != null){
 			userID=(String)session.getAttribute("userID");
+		}
+		
+		int pageNumber=1;
+		//패이지번호 변경
+		if(request.getParameter("pageNumber") != null){
+			pageNumber = Integer.parseInt(request.getParameter("pageNumber"));
 		}
 	%>
 	
@@ -80,14 +87,32 @@
 						</tr>	
 					</thead>
 					<tbody>
+						<%
+						BbsDAO bbsDAO = new BbsDAO();
+						ArrayList<Bbs> list = bbsDAO.getList(pageNumber);
+						for(int idx=0;idx<list.size();idx++){
+						%>
 						<tr>
-							<td>1</td>
-							<td>연습1</td>
-							<td>홍길동</td>
-							<td>2022-03-28</td>							
+							<td><%= list.get(idx).getBbsID() %></td>
+							<td><%= list.get(idx).getBbsTitle() %></td>
+							<td><%= list.get(idx).getUserID() %></td>
+							<td><%= list.get(idx).getBbsDate() %></td>							
 						</tr>
+						<%
+						}
+						%>
 					</tbody>					
 				</table>
+				<%
+					if(pageNumber>1){
+				%>
+				<a href="bbs.jsp?pageNumber=<%= pageNumber - 1 %>" class="btn btn-success">이전</a>
+				<%} %>
+				<% 
+					if(bbsDAO.nextPage(pageNumber+1)){
+				%>
+				<a href="bbs.jsp?pageNumber=<%= pageNumber + 1 %>" class="btn btn-success">다음</a>
+				<%} %>
 				<a href="./write.jsp" class="btn btn-success">글쓰기</a>
 			</div>
 			
