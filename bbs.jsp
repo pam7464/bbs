@@ -1,5 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="bbs.BbsDAO" %><!-- 사용자 라이브러리 -->
+<%@ page import="bbs.Bbs" %><!-- 사용자 라이브러리 -->
+<%@ page import="java.io.PrintWriter" %> <!-- 자바에서 자바스크립트 사용 -->
+
+<% request.setCharacterEncoding("utf-8"); %><!-- 넘어온 한글자료 깨지지 않도록 -->    
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,6 +14,15 @@
 
 </head>
 <body>
+
+	<%
+		//로그인상태 확인
+		String userID = null;
+		if(session.getAttribute("userID") != null){
+			userID=(String)session.getAttribute("userID");
+		}
+	%>
+	
 	<section class="wrap">
 		<!-- 공통 영역  -->
 		<header>
@@ -34,14 +48,18 @@
 								data-toggle="dropdown" role="button" aria-haspopup="true"
 								aria-expanded="false">접속하기<span class="caret"></span></a>
 								
+							<%
+							if(userID == null){
+							%>	
 							<ul class="dropdown-menu">
 								<li class="active"><a href="./login.jsp">로그인</a></li>
 								<li><a href="./join.jsp">회원가입</a></li>
 							</ul>
-							
-							<ul class="dropdown-menu" style="display:none">
+							<%}else{ %>
+							<ul class="dropdown-menu">
 								<li class="active"><a href="./logoutAction.jsp">로그아웃</a></li>								
 							</ul>
+							<%} %>
 						</li>
 					</ul>
 				</div>
@@ -51,7 +69,28 @@
 	
 		<!-- 페이지별 컨텐츠 영역 시작 -->
 		<section>
-			<a href="./write.jsp" class="btn btn-success">글쓰기</a>
+			<div class="container">
+				<table>
+					<thead>
+						<tr>
+							<th style="width:10%;background-color:#aaa;text-align:center;font-size:18px;">문서번호</th>
+							<th style="width:60%;background-color:#aaa;text-align:center;font-size:18px;">제목</th>
+							<th style="width:15%;background-color:#aaa;text-align:center;font-size:18px;">작성자</th>
+							<th style="width:15%;background-color:#aaa;text-align:center;font-size:18px;">작성일</th>							
+						</tr>	
+					</thead>
+					<tbody>
+						<tr>
+							<td>1</td>
+							<td>연습1</td>
+							<td>홍길동</td>
+							<td>2022-03-28</td>							
+						</tr>
+					</tbody>					
+				</table>
+				<a href="./write.jsp" class="btn btn-success">글쓰기</a>
+			</div>
+			
 		</section>
 		
 	</section>

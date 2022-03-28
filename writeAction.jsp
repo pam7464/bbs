@@ -7,9 +7,9 @@
 
 <!-- class를 자바빈즈 사용함, 이름 id설정한 이름 -->
 <jsp:useBean id="bbs" class="bbs.Bbs" scope="page" />
-<!-- 로그인 페이지에서 받아온 userID User.userID에 저장 -->
+<!-- write 페이지에서 받아온 bbsTitle Bbs.bbsTitle에 저장 -->
 <jsp:setProperty name="bbs" property="bbsTitle" />
-<!-- 로그인 페이지에서 받아온 userPassword User.userPassword에 저장 -->
+<!-- write 페이지에서 받아온 bbsContent Bbs.bbsContent에 저장 -->
 <jsp:setProperty name="bbs" property="bbsContent" />
 
     
@@ -17,7 +17,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>글작성</title>
+<title>로그인</title>
 </head>
 <body>
 	<%
@@ -29,18 +29,39 @@
 			userID=(String)session.getAttribute("userID");
 		}
 		
-		
-		//로그인중이 아닐때
+		//로그인중일때 로그인방지
 		if(userID == null){
 			script.println("<script>");
-			script.println("alert('회원만 사용가능합니다')");
-			script.println("location.href='./main.jsp'");
+			script.println("alert('로그인후 작성 가능합니다. 로그인페이지로 이동합니다.')");
+			script.println("location.href='./login.jsp'");
 			script.println("</script>");
-		}
+		}else{
+		
 	
+			//입력자료 확인
+			if(bbs.getBbsTitle() == null || bbs.getBbsContent() == null){
+				script.println("<script>");
+				script.println("alert('문서 내용을 확인하세요')");
+				script.println("history.back()");
+				script.println("</script>");
+			}else{
 		
-		
-		
+				BbsDAO bbsDAO = new BbsDAO();
+				
+				int result = bbsDAO.write(bbs.getBbsTitle(),userID,bbs.getBbsContent());
+				script.println("<script>");
+				
+				if(result == -1){
+					script.println("alert('기록실패')");
+					script.println("location.href='./main.jsp'");
+				}else{				
+					script.println("alert('기록성공')");
+					script.println("location.href='./bbs.jsp'");
+				}
+				
+				script.println("</script>");
+			}
+		}
 		
 	%>
 </body>

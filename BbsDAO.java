@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 public class BbsDAO {
 
@@ -47,12 +48,46 @@ public class BbsDAO {
 			PreparedStatement pstmt=conn.prepareStatement(SQL);
 			rs=pstmt.executeQuery();
 			if(rs.next()) {
-				return rs.getInt(1) + 1;
-			}	
+				return rs.getInt(1) + 1;//다음번호
+			}else {
+				return 1;//시작번호
+			}			
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-		return -1;
+		return -1;//오류번호
+	}
+	
+	//글저장 메소드
+	public int write(String bbsTitle,String userID,String bbsContent) {
+		String SQL = "INSERT INTO bbs VALUES(?,?,?,?,?,?)";
+		try {
+			PreparedStatement pstmt=conn.prepareStatement(SQL);
+			pstmt.setInt(1, getNext());
+			pstmt.setString(2, bbsTitle);
+			pstmt.setString(3, userID);
+			pstmt.setString(4, getDate());
+			pstmt.setString(5, bbsContent);
+			pstmt.setInt(6, 1);
+			return pstmt.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return -1;//데이터베이스 오류
+	}
+	
+	
+	//bbs목록 가져오기 메소드
+	public ArrayList<Bbs> getList(){
+		String SQL = "SELECT * FROM bbs WHERE bbsAvailable = 1 ORDER BY bbsID DESC LIMIT 10";
+		ArrayList<Bbs> list = new ArrayList<Bbs>();
+		try {
+			PreparedStatement pstmt=conn.prepareStatement(SQL);
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 	
 	
