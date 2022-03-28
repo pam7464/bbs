@@ -22,6 +22,22 @@
 <body>
 	<%
 		PrintWriter script = response.getWriter();
+		
+		//로그인상태 확인
+		String userID = null;
+		if(session.getAttribute("userID") != null){
+			userID=(String)session.getAttribute("userID");
+		}
+		
+		//로그인중일때 로그인방지
+		if(userID != null){
+			script.println("<script>");
+			script.println("alert('로그인 상태 입니다.')");
+			script.println("location.href='./main.jsp'");
+			script.println("</script>");
+		}
+	
+	
 		/* 자료입력 확인 */
 		if(user.getUserID() == null || user.getUserPassword() == null){
 			script.println("<script>");
@@ -35,6 +51,9 @@
 			script.println("<script>");
 			
 			if(result == 1){
+				//세션을 생성
+				session.setAttribute("userID",user.getUserID());
+				
 				script.println("alert('로그인성공')");
 				script.println("location.href='./main.jsp'");
 			}else if(result == -1) {
