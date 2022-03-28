@@ -61,7 +61,7 @@
 								<input type="text" placeholder="아이디" class="form-control" name="userID">
 							</div>
 							<div class="form-group">
-								<input type="password" placeholder="패스워드" class="form-control" name="userPass">
+								<input type="password" placeholder="패스워드" class="form-control" name="userPassword">
 							</div>
 							<input type="submit" value="로그인" class="btn btn-primary form-control">
 						</form>
