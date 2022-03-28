@@ -29,6 +29,7 @@
 			userID=(String)session.getAttribute("userID");
 		}
 		
+		
 		//로그인중일때 로그인방지
 		if(userID != null){
 			script.println("<script>");
@@ -37,6 +38,9 @@
 			script.println("</script>");
 		}
 	
+		
+		
+		
 	
 		/* 자료입력 확인 */
 		if(user.getUserID() == null || user.getUserPassword() == null){
