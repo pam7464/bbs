@@ -143,6 +143,23 @@ public class BbsDAO {
 	}
 	
 	
+	//글수정 메소드
+	public int update(String bbsTitle,String userID,String bbsContent,int bbsID) {
+		String SQL = "UPDATE bbs SET bbsTitle=?,bbsContent=? WHERE userID=? AND bbsID=?";
+		try {
+			PreparedStatement pstmt=conn.prepareStatement(SQL);
+			pstmt.setString(1, bbsTitle);
+			pstmt.setString(2, bbsContent);
+			pstmt.setString(3, userID);
+			pstmt.setInt(4, bbsID);
+			return pstmt.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return -1;//데이터베이스 오류
+	}
+	
+	
 }
 
 

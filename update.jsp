@@ -3,7 +3,6 @@
 <%@ page import="java.io.PrintWriter" %>
 <%@ page import="bbs.BbsDAO" %>
 <%@ page import="bbs.Bbs" %>
-    
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,8 +37,6 @@
 		
 		//bbs인스턴스 생성
 		Bbs bbs = new BbsDAO().getBbs(bbsID);
-		
-		
 	%>
 	<section class="wrap">
 		<!-- 공통 영역  -->
@@ -86,30 +83,29 @@
 	
 		<!-- 페이지별 컨텐츠 영역 시작 -->
 		<section>
-			<!-- 글읽기 양식 -->
+			<!-- 로그인 양식 -->
 			<div class="container">
 				<div class="col-lg-12">
 					<div class="jumbotron" style="margin-top:20px;padding-top:30px">
-						<h2 style="text-align:center">게시판 글 보기</h2>		
-						<div>
-							<span>제목</span>
-							<span><%= bbs.getBbsTitle() %></span>
-							<br>
-							<span>내용</span>
-							<span><%= bbs.getBbsContent() %></span>
-							<br>
-							<span>작성자</span>
-							<span><%= bbs.getUserID() %></span>
-							<br>
-							<span>작성일자</span>
-							<span><%= bbs.getBbsDate() %></span>
-							<br>
-						</div>
-					</div>
-					<div class="button-group">
-						<a href="./bbs.jsp" class="btn btn-success">목록</a>
-						<a href="./deleteAction.jsp" class="btn btn-success">삭제</a>
-						<a href="./update.jsp?bbsID=<%= bbsID %>" class="btn btn-success">수정</a>						
+						<form method="post" action="./updateAction.jsp">
+							<h2 style="text-align:center">글수정 양식</h2>		
+							<div class="form-group">
+								<input type="text" placeholder="제목" class="form-control" name="bbsTitle" 
+									value="<%= bbs.getBbsTitle() %>"
+								>
+							</div>
+							<div class="form-group">
+								<input type="text" placeholder="글내용" class="form-control" name="bbsContent" 
+									value="<%= bbs.getBbsContent() %>"
+								>
+							</div >
+							<div class="form-group">
+								<input type="hidden" placeholder="글내용" class="form-control" name="bbsID" 
+								value="<%= bbs.getBbsID() %>"
+								>
+							</div>
+							<input type="submit" value="글수정" class="btn btn-primary form-control">
+						</form>
 					</div>
 				</div>
 			</div>
@@ -122,10 +118,3 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
-
-
-
-
-
-
-
