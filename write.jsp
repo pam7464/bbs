@@ -19,8 +19,8 @@
 		}
 		if(userID == null){
 			script.println("<script>");
-			script.println("alert('잘못된 접근입니다.')");
-			script.println("location.href='./bbs.jsp'");
+			script.println("alert('로그인후 이용 가능합니다.')");
+			script.println("location.href='./login.jsp'");
 			script.println("</script>");
 		}
 	%>

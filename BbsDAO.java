@@ -118,6 +118,23 @@ public class BbsDAO {
 		return false;
 	}
 	
+	//마지막 페이지 번호 메서드
+		public int getPages() {
+			String SQL = "SELECT * FROM bbs WHERE bbsAvailable=1";
+			try {
+				PreparedStatement pstmt=conn.prepareStatement(SQL);				
+				rs=pstmt.executeQuery();
+				int recordCount = 0;
+				while(rs.next()) {
+					recordCount++;
+				}
+				return (recordCount-1) / 10 + 1;
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+			return -1;
+		}
+	
 	//문서 읽기
 	public Bbs getBbs(int bbsID) {
 		String SQL = "SELECT * FROM bbs WHERE bbsID = ?";
