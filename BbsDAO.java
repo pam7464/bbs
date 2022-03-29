@@ -207,12 +207,3 @@ public class BbsDAO {
 	
 	
 }
-
-
-
-
-
-
-
-
-
