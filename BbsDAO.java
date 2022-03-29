@@ -43,7 +43,7 @@ public class BbsDAO {
 	
 	//다음에 들어갈 문서번호 구하기
 	public int getNext() {
-		String SQL = "SELECT bbsID FROM bbs ORDER BY bbsID DESC";
+		String SQL = "SELECT bbsID FROM bbs WHERE bbsAvailable=1 ORDER BY bbsID DESC";
 		try {
 			PreparedStatement pstmt=conn.prepareStatement(SQL);
 			rs=pstmt.executeQuery();

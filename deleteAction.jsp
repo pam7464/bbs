@@ -53,11 +53,6 @@
 				script.println("alert('글 삭제에 성공')");
 				script.println("location.href='./bbs.jsp'");
 				script.println("</script>");
-			}else if(result == -1){				
-				script.println("<script>");
-				script.println("alert('데이터베이스 오류')");
-				script.println("location.href='./bbs.jsp'");
-				script.println("</script>");
 			}else{
 				script.println("<script>");
 				script.println("alert('사용자를 확인하세요')");
