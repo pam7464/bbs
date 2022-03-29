@@ -108,7 +108,7 @@
 					</div>
 					<div class="button-group">
 						<a href="./bbs.jsp" class="btn btn-success">목록</a>
-						<a href="./deleteAction.jsp" class="btn btn-success">삭제</a>
+						<a href="./deleteAction.jsp?bbsID=<%= bbsID %>" class="btn btn-success">삭제</a>
 						<a href="./update.jsp?bbsID=<%= bbsID %>" class="btn btn-success">수정</a>						
 					</div>
 				</div>
