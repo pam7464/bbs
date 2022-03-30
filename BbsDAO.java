@@ -12,20 +12,20 @@ public class BbsDAO {
 	private PreparedStatement pstmt;
 	private ResultSet rs;
 		
-	//		---------- DBì ‘ê·¼ ----------  //
+	//		---------- DBÁ¢±Ù ----------  //
 	public BbsDAO() {
 		try {
-			String dbURL = "jdbc:mysql://localhost:3306/bbs";//mysql ìœ„ì¹˜
+			String dbURL = "jdbc:mysql://localhost:3306/bbs";//mysql À§Ä¡
 			String dbID = "root";//mysql ID
 			String dbPassword = "root";//mysql PASSWORD
-			Class.forName("com.mysql.cj.jdbc.Driver");//ì ‘ì† ë“œë¼ì´ë²„
-			conn=DriverManager.getConnection(dbURL, dbID, dbPassword);//DBì—°ê²°ì •ë³´ ë° ì—°ê²°
+			Class.forName("com.mysql.cj.jdbc.Driver");//Á¢¼Ó µå¶óÀÌ¹ö
+			conn=DriverManager.getConnection(dbURL, dbID, dbPassword);//DB¿¬°áÁ¤º¸ ¹× ¿¬°á
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	//ì˜¤ëŠ˜ ë‚ ì§œ êµ¬í•˜ê¸°
+	//¿À´Ã ³¯Â¥ ±¸ÇÏ±â
 	public String getDate() {
 		String SQL = "SELECT DATE(NOW())";
 		try {
@@ -41,24 +41,24 @@ public class BbsDAO {
 		return "";
 	}
 	
-	//ë‹¤ìŒì— ë“¤ì–´ê°ˆ ë¬¸ì„œë²ˆí˜¸ êµ¬í•˜ê¸°
+	//´ÙÀ½¿¡ µé¾î°¥ ¹®¼­¹øÈ£ ±¸ÇÏ±â
 	public int getNext() {
 		String SQL = "SELECT bbsID FROM bbs WHERE bbsAvailable=1 ORDER BY bbsID DESC";
 		try {
 			PreparedStatement pstmt=conn.prepareStatement(SQL);
 			rs=pstmt.executeQuery();
 			if(rs.next()) {
-				return rs.getInt(1) + 1;//ë‹¤ìŒë²ˆí˜¸
+				return rs.getInt(1) + 1;//´ÙÀ½¹øÈ£
 			}else {
-				return 1;//ì‹œì‘ë²ˆí˜¸
+				return 1;//½ÃÀÛ¹øÈ£
 			}			
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-		return -1;//ì˜¤ë¥˜ë²ˆí˜¸
+		return -1;//¿À·ù¹øÈ£
 	}
 	
-	//ê¸€ì €ì¥ ë©”ì†Œë“œ
+	//±ÛÀúÀå ¸Ş¼Òµå
 	public int write(String bbsTitle,String userID,String bbsContent) {
 		String SQL = "INSERT INTO bbs VALUES(?,?,?,?,?,?)";
 		try {
@@ -73,34 +73,36 @@ public class BbsDAO {
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-		return -1;//ë°ì´í„°ë² ì´ìŠ¤ ì˜¤ë¥˜
+		return -1;//µ¥ÀÌÅÍº£ÀÌ½º ¿À·ù
 	}
-	//record count
-	//public int rCount() {
-	//	String sql = "select * from bbs where bbsAvailable = 1";
-	//	try {
-	//		PreparedStatement pstmt = conn.prepareStatement(sql);
-	//		rs = pstmt.executeQuery();
-	//		int cnt=1;
-	//		while(rs.next()) {
-	//			cnt++;
-	//		}
-	//		return cnt;
-	//	}catch (Exception e) {
-	//		e.printStackTrace();
-	//	}
-	//	return -1;
-	//}
 	
-	//bbsëª©ë¡ ê°€ì ¸ì˜¤ê¸° ë©”ì†Œë“œ
+	//·¹ÄÚµåÀÇ °³¼ö
+	public int recordCount() {
+		String SQL = "SELECT * FROM bbs WHERE bbsAvailable=1";
+		try {
+			PreparedStatement pstmt=conn.prepareStatement(SQL);				
+			rs=pstmt.executeQuery();
+			int recordCount = 1;
+			while(rs.next()) {
+				recordCount++;
+			}
+			return recordCount;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	
+	
+	//bbs¸ñ·Ï °¡Á®¿À±â ¸Ş¼Òµå
 	public ArrayList<Bbs> getList(int pageNumber){
-		String SQL = "SELECT * FROM bbs WHERE bbsID<? AND bbsAvailable = 1 ORDER BY bbsID DESC LIMIT 10";
-              //String sql = "select * from bbs where bbsAvailable = 1 order by bbsID desc limit ?,10";
+		//String SQL = "SELECT * FROM bbs WHERE bbsID<? AND bbsAvailable = 1";
+		String SQL = "SELECT * FROM bbs WHERE bbsAvailable = 1 ORDER BY bbsID DESC LIMIT ?,10";                        
 		ArrayList<Bbs> list = new ArrayList<Bbs>();
 		try {
 			PreparedStatement pstmt=conn.prepareStatement(SQL);
-			pstmt.setInt(1, getNext() - (pageNumber-1)*10);
-	              //pstmt.setInt(1,rCount()-(rCount()-(pageNumber -1)*10));
+			//pstmt.setInt(1, getNext() - (pageNumber-1)*10);
+			pstmt.setInt(1, recordCount() - (recordCount()-(pageNumber-1)*10));
 			rs=pstmt.executeQuery();
 			while(rs.next()) {
 				Bbs bbs = new Bbs();
@@ -119,13 +121,15 @@ public class BbsDAO {
 	}
 	
 	
-	//í˜ì´ì§€ ì²˜ë¦¬ ë©”ì„œë“œ
+	//ÆäÀÌÁö Ã³¸® ¸Ş¼­µå
 	public boolean nextPage(int pageNumber) {
-		String SQL = "SELECT * FROM bbs WHERE bbsID<? AND bbsAvailable = 1";
+		//String SQL = "SELECT * FROM bbs WHERE bbsID<? AND bbsAvailable = 1";
+		String SQL = "SELECT * FROM bbs WHERE bbsAvailable = 1 ORDER BY bbsID DESC LIMIT ?,10";
+		
 		try {
 			PreparedStatement pstmt=conn.prepareStatement(SQL);
-			pstmt.setInt(1, getNext() - (pageNumber-1)*10);
-		      //pstmt.setInt(1, rCount() - (pageNumber-1)*10);
+			//pstmt.setInt(1, getNext() - (pageNumber-1)*10);
+			pstmt.setInt(1, recordCount() - (recordCount()-(pageNumber-1)*10));
 			rs=pstmt.executeQuery();
 			if(rs.next()) {
 				return true;
@@ -136,7 +140,7 @@ public class BbsDAO {
 		return false;
 	}
 	
-	//ë§ˆì§€ë§‰ í˜ì´ì§€ ë²ˆí˜¸ ë©”ì„œë“œ
+	//¸¶Áö¸· ÆäÀÌÁö ¹øÈ£ ¸Ş¼­µå
 		public int getPages() {
 			String SQL = "SELECT * FROM bbs WHERE bbsAvailable=1";
 			try {
@@ -153,7 +157,7 @@ public class BbsDAO {
 			return -1;
 		}
 	
-	//ë¬¸ì„œ ì½ê¸°
+	//¹®¼­ ÀĞ±â
 	public Bbs getBbs(int bbsID) {
 		String SQL = "SELECT * FROM bbs WHERE bbsID = ?";
 		try {
@@ -178,7 +182,7 @@ public class BbsDAO {
 	}
 	
 	
-	//ê¸€ìˆ˜ì • ë©”ì†Œë“œ
+	//±Û¼öÁ¤ ¸Ş¼Òµå
 	public int update(String bbsTitle,String userID,String bbsContent,int bbsID) {
 		String SQL = "UPDATE bbs SET bbsTitle=?,bbsContent=? WHERE userID=? AND bbsID=?";
 		try {
@@ -191,10 +195,10 @@ public class BbsDAO {
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-		return -1;//ë°ì´í„°ë² ì´ìŠ¤ ì˜¤ë¥˜
+		return -1;//µ¥ÀÌÅÍº£ÀÌ½º ¿À·ù
 	}
 	
-	//ê¸€ì§„ì§œ ì‚­ì œ ë©”ì†Œë“œ
+	//±ÛÁøÂ¥ »èÁ¦ ¸Ş¼Òµå
 	public int delete(String userID,int bbsID) {
 		String SQL = "DELETE FROM bbs WHERE bbsID=? AND userID=?";
 		try {
@@ -205,10 +209,10 @@ public class BbsDAO {
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-		return -1;//ë°ì´í„°ë² ì´ìŠ¤ ì˜¤ë¥˜
+		return -1;//µ¥ÀÌÅÍº£ÀÌ½º ¿À·ù
 	}
 	
-	//ê¸€ê°€ì§œ ì‚­ì œ ë©”ì†Œë“œ
+	//±Û°¡Â¥ »èÁ¦ ¸Ş¼Òµå
 	public int delete2(String userID,int bbsID) {
 		String SQL = "UPDATE bbs SET bbsAvailable = 0 WHERE bbsID=? AND userID=?";
 		try {
@@ -220,7 +224,7 @@ public class BbsDAO {
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-		return -1;//ë°ì´í„°ë² ì´ìŠ¤ ì˜¤ë¥˜
+		return -1;//µ¥ÀÌÅÍº£ÀÌ½º ¿À·ù
 	}
 	
 	
