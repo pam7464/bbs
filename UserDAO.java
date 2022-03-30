@@ -88,38 +88,22 @@ public class UserDAO {
 			e.printStackTrace();
 		}
 		return null;
-	}
-    	
-	//------------------------- È¸¿øÅ»Åð ----------------------------
+	}   	
 	
-	//È¸¿øÅ»Åð1
+
+	//---------------------------- È¸¿ø Å»Åð ---------------------
 	public int deleteUser(String userID,String userPassword) {
 		String SQL = "DELETE FROM user WHERE userID=? AND userPassword=?";
 		try {
 			PreparedStatement pstmt=conn.prepareStatement(SQL);
-			pstmt.setString(1, userID);
-			pstmt.setString(2, userPassword);			
+			pstmt.setString(1,userID);
+			pstmt.setString(2,userPassword);
 			return pstmt.executeUpdate();
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-		return -1;//µ¥ÀÌÅÍº£ÀÌ½º ¿À·ù
+		return -1;
 	}
-	
-	//È¸¿øÅ»Åð2
-		public int deleteUser2(String userID,String userPassword) {
-			String SQL = "UPDATE user SET userAvailable = 0 WHERE userID=? AND userPassword=?";
-			try {
-				
-				PreparedStatement pstmt=conn.prepareStatement(SQL);
-				pstmt.setString(1, userID);
-				pstmt.setString(2, userPassword);		
-				return pstmt.executeUpdate();			
-			}catch (Exception e) {
-				e.printStackTrace();
-			}
-			return -1;//µ¥ÀÌÅÍº£ÀÌ½º ¿À·ù
-		}
 }
 
 

@@ -57,6 +57,7 @@
 							<!-- 로그인 상태 -->
 							<ul class="dropdown-menu">
 								<li class="active"><a href="./logoutAction.jsp">로그아웃</a></li>								
+								<li><a href="./myPage.jsp">마이페이지</a></li>
 							</ul>
 							<% }%>
 							

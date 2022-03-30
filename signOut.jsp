@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="java.io.PrintWriter" %>
-<%@ page import="user.UserDAO" %>
 <%@ page import="user.User" %>
+<%@ page import="user.UserDAO" %>
+<%@ page import="java.io.PrintWriter" %>
     
 <!DOCTYPE html>
 <html>
@@ -13,26 +13,22 @@
 
 </head>
 <body>
-	<%
+	<% 
 		PrintWriter script=response.getWriter();
-		//로그인상태 확인
+		
 		String userID = null;
 		if(session.getAttribute("userID") != null){
-			userID=(String)session.getAttribute("userID");
+			userID = (String)session.getAttribute("userID");
 		}
-		
 		if(userID == null){
 			script.println("<script>");
-			script.println("alert('로그인후 사용가능합니다.')");
-			script.println("location.href='./login.jsp'");
+			script.println("alert('회원전용 페이지입니다.')");
+			script.println("location.href='./main.jsp'");
 			script.println("</script>");
-		}		
+		}
 		
-		
-		
-		//bbs인스턴스 생성
-		User user = new UserDAO().getUser(userID);
-		
+		User user=new UserDAO().getUser(userID);
+	
 	%>
 	<section class="wrap">
 		<!-- 공통 영역  -->
@@ -58,18 +54,15 @@
 							<a href="#" class="dropdown-toggle"
 								data-toggle="dropdown" role="button" aria-haspopup="true"
 								aria-expanded="false">접속하기<span class="caret"></span></a>
-							<%
-							if(userID == null){
-							%>	
+								
 							<ul class="dropdown-menu">
 								<li class="active"><a href="./login.jsp">로그인</a></li>
 								<li><a href="./join.jsp">회원가입</a></li>
 							</ul>
-							<%}else{ %>
-							<ul class="dropdown-menu">
+							
+							<ul class="dropdown-menu" style="display:none">
 								<li class="active"><a href="./logoutAction.jsp">로그아웃</a></li>								
 							</ul>
-							<%} %>
 						</li>
 					</ul>
 				</div>
@@ -79,35 +72,38 @@
 	
 		<!-- 페이지별 컨텐츠 영역 시작 -->
 		<section>
-			<!-- 글읽기 양식 -->
+			<!-- 로그인 양식 -->
 			<div class="container">
 				<div class="col-lg-12">
-					<form action="signOutAction.jsp" method="post">
-						<div class="jumbotron" style="margin-top:20px;padding-top:30px">
-							<h2 style="text-align:center">회원탈퇴</h2>		
-							<div>
-								<label>사용자명 : 
-									<input type="text" name="userName" value="<%= user.getUserName() %>"></input>
+					<div class="jumbotron" style="margin-top:20px;padding-top:30px">
+						<form method="post" action="./signOutAction.jsp">
+							<h2 style="text-align:center">회원 탈퇴</h2>		
+							<div class="form-group">
+								<label>사용자명
+									<input type="text" class="form-control" name="userName" value="<%= user.getUserName() %>" disabled>
 								</label>
-								<br>
-								<label>아이디
-									<input type="text" name="userID" value="<%= user.getUserID() %>"></input>								
-								</label>
-								<label>패스워드
-									<input type="password" name="userPassword"></input>								
-								</label>
-								<label>패스워드확인
-									<input type="password" name="userPassword1"></input>								
-								</label>
-								
 							</div>
-						</div>
-						<div class="button-group">
-							<input type="submit" class="btn btn-success" value="회원탈퇴">
+							<div class="form-group">
+								<label>아이디
+									<input type="text" class="form-control" name="userID" value="<%= user.getUserID() %>" disabled>
+								</label>
+							</div>
+							<div class="form-group">
+								<label>패스워드
+									<input type="password" class="form-control" name="userPassword">
+								</label>
+							</div>
+							<div class="form-group">
+								<label>패스워드확인
+									<input type="password" class="form-control" name="userPassword1">
+								</label>
+							</div>
 							
-							<a href="./main.jsp" class="btn btn-success">취소</a>										
-						</div>
-					</form>
+							<input type="submit" value="회원탈퇴" class="btn btn-danger form-control">
+							<input type="button" value="취소" class="btn btn-success form-control" onClick="location.href='./main.jsp'">
+							
+						</form>
+					</div>
 				</div>
 			</div>
 		</section>
@@ -119,3 +115,10 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
+
+
+
+
+
+
+
