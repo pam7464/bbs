@@ -34,48 +34,40 @@
 	if(request.getParameter("userPassword3") != null){
 		userPassword3 = request.getParameter("userPassword3");
 	}
-	
-	
-	if(userPassword2.equals(userPassword3)){
-		//존재하지않는 또는 잘못된 접근처리
-		if(userID == null ){
+	//로그인중일때 로그인방지
+	if(userID == null){
+		script.println("<script>");
+		script.println("alert('회원전용 기능입니다.')");
+		script.println("location.href='./main.jsp'");
+		script.println("</script>");
+	}else if(userPassword2.equals(userPassword3)){	
+		UserDAO userDAO = new UserDAO();
+		int result = userDAO.updateUser(userID,userPassword1,userPassword2);			;
+		//변경성공
+		 if(result == 1){
 			script.println("<script>");
-			script.println("alert('잘못된 접근입니다.')");
+			script.println("alert('패스워드 변경 완료')");
+			script.println("location.href='./logoutAction.jsp'");
+			script.println("</script>");
+		}else if(result == -1){
+			script.println("<script>");
+			script.println("alert('가입된 패스워드가 아닙니다.')");
+			script.println("history.back()");
+			script.println("</script>");
+		}else if(result == -2){
+			script.println("<script>");
+			script.println("alert('변경비밀번호는 반드시 기존 비밀번호와 달라야 합니다.')");
+			script.println("history.back()");
+			script.println("</script>");
+		}else{
+			script.println("<script>");
+			script.println("alert('데이터베이스 오류')");
 			script.println("location.href='bbs.jsp'");
 			script.println("</script>");
 		}
-		
-		//로그인중일때 로그인방지
-		if(userID == null){
-			script.println("<script>");
-			script.println("alert('회원전용 기능입니다.')");
-			script.println("location.href='./main.jsp'");
-			script.println("</script>");
-		}else{	
-			UserDAO userDAO = new UserDAO();
-			int result = userDAO.updateUser(userID,userPassword1,userPassword2);
-			//탈퇴성공
-			if(result == 1){
-				script.println("<script>");
-				script.println("alert('패스워드 변경 완료')");
-				script.println("location.href='./logoutAction.jsp'");
-				script.println("</script>");
-			}else if(result == -1){
-				script.println("<script>");
-				script.println("alert('현재 패스워드가 불일치 합니다.')");
-				script.println("history.back()");
-				script.println("</script>");
-			}else{
-				script.println("<script>");
-				script.println("alert('데이터베이스 오류')");
-				script.println("history.back()");
-				script.println("</script>");
-			}
-			
-		}
 	}else{
 		script.println("<script>");
-		script.println("alert('패스워드를 확인하세요')");
+		script.println("alert('변경패스워드1과 변경패스워드2가 불일치 합니다.')");
 		script.println("history.back()");
 		script.println("</script>");
 	}

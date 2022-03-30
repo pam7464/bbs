@@ -28,6 +28,7 @@
 		}
 		
 		User user=new UserDAO().getUser(userID);
+		
 	
 	%>
 	<section class="wrap">
