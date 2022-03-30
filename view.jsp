@@ -29,12 +29,12 @@
 		
 		
 		//존재하지않는 또는 잘못된 접근처리
-		if(bbsID == 0 || userID == null){
+/* 		if(bbsID == 0 || userID == null){
 			script.println("<script>");
 			script.println("alert('잘못된 접근입니다.')");
 			script.println("location.href='bbs.jsp'");
 			script.println("</script>");
-		}
+		} */
 		
 		//bbs인스턴스 생성
 		Bbs bbs = new BbsDAO().getBbs(bbsID);
@@ -108,8 +108,12 @@
 					</div>
 					<div class="button-group">
 						<a href="./bbs.jsp" class="btn btn-success">목록</a>
+						<%
+						if(bbsID != 0 && userID != null){
+						 %>
 						<a href="./deleteAction.jsp?bbsID=<%= bbsID %>" class="btn btn-success">삭제</a>
-						<a href="./update.jsp?bbsID=<%= bbsID %>" class="btn btn-success">수정</a>						
+						<a href="./update.jsp?bbsID=<%= bbsID %>" class="btn btn-success">수정</a>
+						<%} %>						
 					</div>
 				</div>
 			</div>
