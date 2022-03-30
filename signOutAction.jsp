@@ -25,52 +25,39 @@
 	String userPassword = null;
 	if(request.getParameter("userPassword") != null){
 		userPassword = request.getParameter("userPassword");
-	}
-	
-	// userPassword 초기화하고 request가 존재한다면 userPassword를 셋팅
-	String userPassword1 = null;
-	if(request.getParameter("userPassword1") != null){
-		userPassword1 = request.getParameter("userPassword1");
-	}
-	
-	if(userPassword == userPassword1){
-		//존재하지않는 또는 잘못된 접근처리
-			if(userID == null ){
+	}	
+	//존재하지않는 또는 잘못된 접근처리
+		if(userID == null ){
+			script.println("<script>");
+			script.println("alert('잘못된 접근입니다.')");
+			script.println("location.href='bbs.jsp'");
+			script.println("</script>");
+		}
+		
+		//로그인중일때 로그인방지
+		if(userID == null){
+			script.println("<script>");
+			script.println("alert('회원전용 기능입니다.')");
+			script.println("location.href='./main.jsp'");
+			script.println("</script>");
+		}else{	
+			UserDAO userDAO = new UserDAO();
+			int result = userDAO.deleteUser(userID,userPassword);
+			//탈퇴성공
+			if(result == 1){
 				script.println("<script>");
-				script.println("alert('잘못된 접근입니다.')");
-				script.println("location.href='bbs.jsp'");
+				script.println("alert('회원탈퇴 안료')");
+				script.println("location.href='./logoutAction.jsp'");
+				script.println("</script>");
+			}else{
+				script.println("<script>");
+				script.println("alert('사용자 정보를 다시 확인하세요')");
+				script.println("history.back()");
 				script.println("</script>");
 			}
 			
-			//로그인중일때 로그인방지
-			if(userID == null){
-				script.println("<script>");
-				script.println("alert('회원전용 기능입니다.')");
-				script.println("location.href='./main.jsp'");
-				script.println("</script>");
-			}else{	
-				UserDAO userDAO = new UserDAO();
-				int result = userDAO.deleteUser(userID,userPassword);
-				//탈퇴성공
-				if(result == 1){
-					script.println("<script>");
-					script.println("alert('회원탈퇴 안료')");
-					script.println("location.href='./logoutAction.jsp'");
-					script.println("</script>");
-				}else{
-					script.println("<script>");
-					script.println("alert('사용자 정보를 다시 확인하세요')");
-					script.println("history.back()");
-					script.println("</script>");
-				}
-				
-			}
-	}else{
-		script.println("<script>");
-		script.println("alert('패스워드를 다시 확인하세요')");
-		script.println("history.back()");
-		script.println("</script>");
-	}
+		}
+	
 	
 	%>
 
