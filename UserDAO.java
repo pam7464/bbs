@@ -13,25 +13,25 @@ public class UserDAO {
 	private PreparedStatement pstmt;
 	private ResultSet rs;
 		
-	//		---------- DBÁ¢±Ù ----------  //
+	//		---------- DBì ‘ê·¼ ----------  //
 	public UserDAO() {
 		try {
-			String dbURL = "jdbc:mysql://localhost:3306/bbs";//mysql À§Ä¡
+			String dbURL = "jdbc:mysql://localhost:3306/bbs";//mysql ìœ„ì¹˜
 			String dbID = "root";//mysql ID
 			String dbPassword = "root";//mysql PASSWORD
-			Class.forName("com.mysql.cj.jdbc.Driver");//Á¢¼Ó µå¶óÀÌ¹ö
-			conn=DriverManager.getConnection(dbURL, dbID, dbPassword);//DB¿¬°áÁ¤º¸ ¹× ¿¬°á
+			Class.forName("com.mysql.cj.jdbc.Driver");//ì ‘ì† ë“œë¼ì´ë²„
+			conn=DriverManager.getConnection(dbURL, dbID, dbPassword);//DBì—°ê²°ì •ë³´ ë° ì—°ê²°
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
 	
-	//     ----------------- ·Î±×ÀÎ ¸Þ¼Òµå -----------------          //
+	//     ----------------- ë¡œê·¸ì¸ ë©”ì†Œë“œ -----------------          //
 	public int login(String userID,String userPassword) {
 		String SQL = "SELECT userPassword FROM user WHERE userID=?";
 		try {
-			pstmt=conn.prepareStatement(SQL);//DB¿¡¼­ SQL½ÇÇàÁØºñ
+			pstmt=conn.prepareStatement(SQL);//DBì—ì„œ SQLì‹¤í–‰ì¤€ë¹„
 			pstmt.setString(1, userID);
 			rs=pstmt.executeQuery();
 			if(rs.next()) {
@@ -50,46 +50,44 @@ public class UserDAO {
 	}
 
 	
-//  ----------------- join(È¸¿ø°¡ÀÔ) ¸Þ¼Òµå -----------------          //
+//  ----------------- join(íšŒì›ê°€ìž…) ë©”ì†Œë“œ -----------------          //
 	public int join(String userID,String userPassword,String userName,String userGender,String userEmail) {
 		String SQL = "INSERT INTO user VALUES(?,?,?,?,?)";
 		try {
-			pstmt=conn.prepareStatement(SQL);//DB¿¡¼­ SQL½ÇÇàÁØºñ
+			pstmt=conn.prepareStatement(SQL);//DBì—ì„œ SQLì‹¤í–‰ì¤€ë¹„
 			pstmt.setString(1, userID);
 			pstmt.setString(2, userPassword);
 			pstmt.setString(3, userName);
 			pstmt.setString(4, userGender);
 			pstmt.setString(5, userEmail);			
-			return  pstmt.executeUpdate();//executeUpdate => º¯°æ,executeQuery => °Ë»ö			
+			return  pstmt.executeUpdate();//executeUpdate => ë³€ê²½,executeQuery => ê²€ìƒ‰			
 		}catch (Exception e){
 			e.printStackTrace();
 		}
 		return -1;
 	}
 	
-	
-    	//È¸¿øÁ¤º¸ ÀÐ±â
-		public User getUser(String userID) {
-			String SQL = "SELECT * FROM user WHERE userID = ?";
-			try {
-				PreparedStatement pstmt=conn.prepareStatement(SQL);
-				pstmt.setString(1,userID);
-				rs=pstmt.executeQuery();
-				if(rs.next()) {
-					User user = new User();
-					user.setUserID(rs.getString(1));
-					user.setUserPassword(rs.getString(2));
-					user.setUserName(rs.getString(3));
-					user.setUserGender(rs.getString(4));
-					user.setUserEmail(rs.getString(5));					
-					return user;
-				}
-			}catch (Exception e) {
-				e.printStackTrace();
+	public User getUser(String userID) {
+		String SQL = "SELECT * FROM user WHERE userID = ?";
+		try {
+			PreparedStatement pstmt=conn.prepareStatement(SQL);
+			pstmt.setString(1,userID);
+			rs=pstmt.executeQuery();
+			if(rs.next()) {
+				User user = new User();
+				user.setUserID(rs.getString(1));
+				user.setUserPassword(rs.getString(2));
+				user.setUserName(rs.getString(3));
+				user.setUserGender(rs.getString(4));
+				user.setUserEmail(rs.getString(5));
+				return user;
 			}
-			return null;
-			
+		}catch (Exception e) {
+			e.printStackTrace();
 		}
+		return null;
+	}
+    	
 	
 }
 
