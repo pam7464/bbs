@@ -106,19 +106,48 @@ public class UserDAO {
 	}
 	
 	
+	// ---------------------- 패스워드 일치 메소드 ----------
+	public int chkPass(String userID,String userPassword1) {
+		String SQL = "SELECT userPassword FROM user WHERE userID=?";
+		try {
+			pstmt=conn.prepareStatement(SQL);//DB에서 SQL실행준비
+			pstmt.setString(1, userID);
+			rs=pstmt.executeQuery();
+			if(rs.getString(1).equals(userPassword1)) {
+				return 1;
+			}else {
+				return -1;
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		return -2;
+	}
+	
+	
 	//------------------------- 패스워드 변경 ---------------------
-	public int updateUser(String userID,String userPassword) {
+	public int updateUser(String userID,String userPassword1, String userPassword2) {
 		String SQL = "UPDATE user SET userPassword=? WHERE userID=?";
 		try {
-			PreparedStatement pstmt=conn.prepareStatement(SQL);
-			pstmt.setString(1,userPassword);
-			pstmt.setString(2,userID);
-			return pstmt.executeUpdate();
+			int result = chkPass(userID,userPassword1);
+			if(result==1) {
+				PreparedStatement pstmt=conn.prepareStatement(SQL);
+				pstmt.setString(1,userPassword2);
+				pstmt.setString(2,userID);
+				return pstmt.executeUpdate();
+			}else if(result == -1){
+				return -1;
+			}else {
+				return -2;
+			}
+			
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-		return -1;
-	}
+		return -2;
+	}	
+	
+	
 }
 
 
