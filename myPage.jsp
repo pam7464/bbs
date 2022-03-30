@@ -1,12 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="java.io.PrintWriter" %>
-<%@ page import="user.User" %>
 <%@ page import="user.UserDAO" %>
-<%@ page import="bbs.Bbs" %>
-<%@ page import="bbs.BbsDAO" %>
-
-
+<%@ page import="user.User" %>
     
 <!DOCTYPE html>
 <html>
@@ -25,18 +21,17 @@
 			userID=(String)session.getAttribute("userID");
 		}
 		
-		//넘어온 bbsID를 초기화하고 request가 존재한다면 bbsID로 셋팅
-		int bbsID = 0;
-		if(request.getParameter("bbsID") != null){
-			bbsID = Integer.parseInt(request.getParameter("bbsID"));
-		}
+		if(userID == null){
+			script.println("<script>");
+			script.println("alert('로그인후 사용가능합니다.')");
+			script.println("location.href='./login.jsp'");
+			script.println("</script>");
+		}		
 		
 		
-
 		
 		//bbs인스턴스 생성
-		User user = new UserDAO().getUser(userID); 
-		
+		User user = new UserDAO().getUser(userID);
 		
 	%>
 	<section class="wrap">
@@ -88,19 +83,19 @@
 			<div class="container">
 				<div class="col-lg-12">
 					<div class="jumbotron" style="margin-top:20px;padding-top:30px">
-						<h2 style="text-align:center">마이페이지</h2>		
+						<h2 style="text-align:center">MY PAGE</h2>		
 						<div>
 							<span>사용자명 : </span>
 							<span><%= user.getUserName() %></span>
 							<br>
-							<span>아이디 : </span>
+							<span>아이디</span>
 							<span><%= user.getUserID() %></span>
 							<br>
-							<span>패스워드 : </span>
-							<span>***********</span>
+							<span>패스워드</span>
+							<span>**************</span>
 							<br>
-							<span>성별 : </span>
-							<span><%= user.getUserGender() %></span>
+							<span>성별</span>
+							<span><%= user.getUserGender() %></span>							
 							<br>
 							<span>이매일</span>
 							<span><%= user.getUserEmail() %></span>
@@ -108,8 +103,9 @@
 						</div>
 					</div>
 					<div class="button-group">
-						<a href="./changePass.jsp" class="btn btn-success">패스워드 변경</a>
-						<a href="./unJoin.jsp" class="btn btn-success">회원탈퇴</a>											
+						<a href="./changePassword.jsp" class="btn btn-success">패스워드 변경</a>
+						<a href="./signOut.jsp" class="btn btn-success">회원탈퇴</a>
+						<a href="./main.jsp" class="btn btn-success">확인</a>										
 					</div>
 				</div>
 			</div>
