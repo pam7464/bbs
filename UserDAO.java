@@ -104,6 +104,21 @@ public class UserDAO {
 		}
 		return -1;
 	}
+	
+	
+	//------------------------- 패스워드 변경 ---------------------
+	public int updateUser(String userID,String userPassword) {
+		String SQL = "UPDATE user SET userPassword=? WHERE userID=?";
+		try {
+			PreparedStatement pstmt=conn.prepareStatement(SQL);
+			pstmt.setString(1,userPassword);
+			pstmt.setString(2,userID);
+			return pstmt.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
 }
 
 

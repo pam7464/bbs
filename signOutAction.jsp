@@ -25,8 +25,15 @@
 	String userPassword = null;
 	if(request.getParameter("userPassword") != null){
 		userPassword = request.getParameter("userPassword");
-	}	
-	//존재하지않는 또는 잘못된 접근처리
+	}
+	
+	// userPassword1 초기화하고 request가 존재한다면 userPassword1를 셋팅
+	String userPassword1 = null;
+	if(request.getParameter("userPassword1") != null){
+		userPassword1 = request.getParameter("userPassword1");
+	}
+	if(userPassword.equals(userPassword1)){
+		//존재하지않는 또는 잘못된 접근처리
 		if(userID == null ){
 			script.println("<script>");
 			script.println("alert('잘못된 접근입니다.')");
@@ -57,6 +64,14 @@
 			}
 			
 		}
+	}else{
+		script.println("<script>");
+		script.println("alert('패스워드를 확인하세요')");
+		script.println("history.back()");
+		script.println("</script>");
+	}
+	
+	
 	
 	
 	%>
