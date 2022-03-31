@@ -28,7 +28,6 @@
 		}
 		
 		User user=new UserDAO().getUser(userID);
-		
 	
 	%>
 	<section class="wrap">
@@ -91,17 +90,17 @@
 							</div>
 							<div class="form-group">
 								<label>현재 패스워드
-									<input type="password" class="form-control" name="userPassword1">
+									<input type="password" class="form-control" name="oldPassword">
 								</label>
 							</div>
 							<div class="form-group">
 								<label>변경패스워드1
-									<input type="password" class="form-control" name="userPassword2">
+									<input type="password" class="form-control" name="newPassword1">
 								</label>
 							</div>
 							<div class="form-group">
 								<label>변경패스워드2
-									<input type="password" class="form-control" name="userPassword3">
+									<input type="password" class="form-control" name="newPassword2">
 								</label>
 							</div>
 							

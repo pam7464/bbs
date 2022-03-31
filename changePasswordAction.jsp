@@ -21,61 +21,65 @@
 		userID=(String)session.getAttribute("userID");
 	}
 	
-	// userPassword 초기화하고 request가 존재한다면 userPassword를 셋팅
-	String userPassword1 = null;
-	if(request.getParameter("userPassword1") != null){
-		userPassword1 = request.getParameter("userPassword1");
+	// 현재패스워드
+	String oldPassword = null;
+	if(request.getParameter("oldPassword") != null){
+		oldPassword = request.getParameter("oldPassword");
 	}
-	String userPassword2 = null;
-	if(request.getParameter("userPassword2") != null){
-		userPassword2 = request.getParameter("userPassword2");
+	//새로운패스워드1
+	String newPassword1 = null;
+	if(request.getParameter("newPassword1") != null){
+		newPassword1 = request.getParameter("newPassword1");
 	}
-	String userPassword3 = null;
-	if(request.getParameter("userPassword3") != null){
-		userPassword3 = request.getParameter("userPassword3");
+	//새로운패스워드2
+	String newPassword2 = null;
+	if(request.getParameter("newPassword2") != null){
+		newPassword2 = request.getParameter("newPassword2");
 	}
-	//로그인중일때 로그인방지
-	if(userID == null){
+	
+	
+	if(userID==null){
+		//로그오프
 		script.println("<script>");
-		script.println("alert('회원전용 기능입니다.')");
-		script.println("location.href='./main.jsp'");
+		script.println("alert('회원전용 서비스입니다.')");
+		script.println("location.href='main.jsp'");
 		script.println("</script>");
-	}else if(userPassword2.equals(userPassword3)){	
+	}else if(newPassword1.equals(newPassword2)){
+		//로그인,새로운 패스워드 일치
 		UserDAO userDAO = new UserDAO();
-		int result = userDAO.updateUser(userID,userPassword1,userPassword2);			;
-		//변경성공
-		 if(result == 1){
+		int result =  userDAO.updateUser(userID,oldPassword,newPassword1);
+		
+		if(result == 1){
+			//변경성공(1)
 			script.println("<script>");
-			script.println("alert('패스워드 변경 완료')");
-			script.println("location.href='./logoutAction.jsp'");
+			script.println("alert('회원정보 변경 완료')");
+			script.println("location.href='main.jsp'");
 			script.println("</script>");
 		}else if(result == -1){
+			//현재패스워드 다를때(-1)
 			script.println("<script>");
-			script.println("alert('가입된 패스워드가 아닙니다.')");
+			script.println("alert('현재 패스워드를 확인하세요')");
 			script.println("history.back()");
 			script.println("</script>");
 		}else if(result == -2){
+			//변경패스워드 현재패스워드 같을때(-2)
 			script.println("<script>");
-			script.println("alert('변경비밀번호는 반드시 기존 비밀번호와 달라야 합니다.')");
+			script.println("alert('새로운 패스워드는 이전 패스워드와 달라야 합니다.')");
 			script.println("history.back()");
 			script.println("</script>");
 		}else{
+			//데이터베이스 오류(-3)
 			script.println("<script>");
-			script.println("alert('데이터베이스 오류')");
-			script.println("location.href='bbs.jsp'");
+			script.println("alert('알수없는 오류가 발생했습니다. 관리자에게 문의하세요')");
+			script.println("location.href='main.jsp'");
 			script.println("</script>");
 		}
 	}else{
 		script.println("<script>");
-		script.println("alert('변경패스워드1과 변경패스워드2가 불일치 합니다.')");
+		script.println("alert('뉴패스워드가 서로 다름')");
 		script.println("history.back()");
 		script.println("</script>");
 	}
-	
-	
-	
-	
-	
 	%>
 
 </body>

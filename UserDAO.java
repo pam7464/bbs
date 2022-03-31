@@ -107,26 +107,29 @@ public class UserDAO {
 	
 	
 	
+	
 	//------------------------- 패스워드 변경 ---------------------
-	public int updateUser(String userID,String userPassword1, String userPassword2) {
+	public int updateUser(String userID,String oldPassword, String newPassword) {
 		String SQL = "UPDATE user SET userPassword=? WHERE userID=?";
 		try {
-			User user = getUser(userID);
-			if(!user.getUserPassword().equals(userPassword1)){
-				return -1;//현재비밀번호와 같지 않음
-			}else if(user.getUserPassword().equals(userPassword2)){
-				return -2;//현재비밀번호와 변경비밀번호가 같음
-			}else{				
+		User user = getUser(userID);	
+			if(!user.getUserPassword().equals(oldPassword)) {
+				return -1;
+			}else if(oldPassword.equals(newPassword)) {
+				return -2;
+			}else {
 				PreparedStatement pstmt=conn.prepareStatement(SQL);
-				pstmt.setString(1,userPassword2);
+				pstmt.setString(1,newPassword);
 				pstmt.setString(2,userID);
-				return pstmt.executeUpdate();//성공
-			}			
+				return pstmt.executeUpdate();
+			}
+			
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-		return -3;//데이터베이스 오류
-	}
+		//알수없는 DB오류
+		return -3;
+	}	
 	
 	
 }
